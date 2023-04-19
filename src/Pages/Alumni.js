@@ -3,7 +3,9 @@ import '../styles/Alumni.css'
 
 function Alumni() {
   return (
-    <div className='alumni-page'>Alumni</div>
+    <div className='alumni-page'>
+      Alumni
+      </div>
   )
 }
 
