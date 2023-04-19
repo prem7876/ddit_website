@@ -4,8 +4,7 @@ import '../styles/Alumni.css'
 function Alumni() {
   return (
     <div className='alumni-page'>
-      Alumni
-      </div>
+      Alumni  </div>
   )
 }
 
