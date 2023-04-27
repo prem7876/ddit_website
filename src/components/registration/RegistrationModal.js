@@ -20,15 +20,29 @@ import AlumniStudentForm from "./AlumniStudentForm";
 //   },
 // ];
 
-const RegistrationModal = (props) => {
+function RegistrationModal(props) {
   const { token } = theme.useToken();
   const [current, setCurrent] = useState(0);
   const [state, setState] = useSetState({
     alumniOrStudent: undefined,
+    alumniFormFields: {
+      name: "",
+      email: "",
+      batch: null,
+      organization: "",
+      designation: "",
+      city: "",
+    },
   });
 
   const userChose = (option) => {
     setState({ alumniOrStudent: option });
+  };
+
+  const setAlumniFormFields = (fieldName, value) => {
+    const alumniFormFields = { ...state.alumniFormFields };
+    alumniFormFields[fieldName] = value;
+    setState({ alumniFormFields });
   };
 
   const steps = [
@@ -40,7 +54,13 @@ const RegistrationModal = (props) => {
     {
       key: 1,
       title: "Registration  ",
-      content: <AlumniStudentForm alumniOrStudent={state.alumniOrStudent} />,
+      content: (
+        <AlumniStudentForm
+          setAlumniFormFields={setAlumniFormFields}
+          alumniFormFields={state.alumniFormFields}
+          alumniOrStudent={state.alumniOrStudent}
+        />
+      ),
     },
     {
       key: 2,
@@ -105,7 +125,7 @@ const RegistrationModal = (props) => {
       </div>
     </div>
   );
-};
+}
 
 RegistrationModal.propTypes = {
   openRegister: func,
