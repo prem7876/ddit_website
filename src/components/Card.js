@@ -28,6 +28,8 @@ function Card() {
         <Modal
           title="Hi, Please choose an appropreate option to proceed further"
           open={state.onRegister}
+          footer={null}
+          closable
         >
           <RegistrationModal openRegister={openRegister} />
         </Modal>

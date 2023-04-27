@@ -1,5 +1,7 @@
-import React, { useState } from "react";
+import React from "react";
+import { useMount } from "react-use";
 import Axios from "axios";
+import { object, func } from "prop-types";
 import { Button, Form, Input, Select } from "antd";
 
 let batchYears = [];
@@ -14,44 +16,31 @@ for (let index = 1989; index <= latestBatch; index++) {
   batchYears.push(tempYear);
 }
 
-export default function Registration() {
-  const [state, setState] = useState({
-    name: "",
-    email: "",
-    batch: null,
-    organization: "",
-    designation: "",
-    city: "",
-  });
-
-  const resetForm = () => {
-    setState({
-      name: "",
-      email: "",
-      batch: null,
-      organization: "",
-      designation: "",
-      city: "",
-    });
-  };
+function AlumniRegistrationForm(props) {
+  // const [regForm] = Form.useForm();
 
   const handleSubmit = () => {
     // make post request
     Axios.post("http://localhost:5000/register", {
-      registrationDetails: state,
+      registrationDetails: props.alumniFormFields,
     }).then((e) => {
       console.log("handle submit", e);
     });
 
-    console.log("success!!!::", state.email);
+    console.log("success!!!::", props.alumniFormFields.email);
 
     // reset the form
-    resetForm();
+    // regForm.resetFields();
   };
+
+  useMount(() => {
+    console.log("from Alumni form: ", props.alumniFormFields);
+  });
 
   return (
     <div>
       <Form
+        // form={regForm}
         name="basic"
         labelCol={{ span: 8 }}
         wrapperCol={{ span: 16 }}
@@ -66,8 +55,9 @@ export default function Registration() {
           rules={[{ required: true, message: "Please input your name!" }]}
         >
           <Input
+            value={props.alumniFormFields.name}
             placeholder="Firstname Lastname"
-            onChange={(e) => setState({ ...state, name: e.target.value })}
+            onChange={(e) => props.setAlumniFormFields("name", e.target.value)}
           />
         </Form.Item>
 
@@ -88,7 +78,7 @@ export default function Registration() {
           <Input
             placeholder="enter email address"
             onChange={(e) => {
-              setState({ ...state, email: e.target.value });
+              props.setAlumniFormFields("email", e.target.value);
             }}
           />
         </Form.Item>
@@ -100,7 +90,7 @@ export default function Registration() {
         >
           <Select
             style={{ width: 120 }}
-            onChange={(e) => setState({ ...state, batch: e })}
+            onChange={(e) => props.setAlumniFormFields("batch", e)}
             options={batchYears}
           />
         </Form.Item>
@@ -118,7 +108,7 @@ export default function Registration() {
           <Input
             placeholder="Current company name"
             onChange={(e) =>
-              setState({ ...state, organization: e.target.value })
+              props.setAlumniFormFields("organization", e.target.value)
             }
           />
         </Form.Item>
@@ -130,14 +120,14 @@ export default function Registration() {
             {
               required: true,
               message:
-                "Please input your DEsignation in the respective organization!",
+                "Please input your Designation in the respective organization!",
             },
           ]}
         >
           <Input
             placeholder="YOur designation in the company"
             onChange={(e) =>
-              setState({ ...state, designation: e.target.value })
+              props.setAlumniFormFields("designationn", e.target.value)
             }
           />
         </Form.Item>
@@ -151,7 +141,7 @@ export default function Registration() {
         >
           <Input
             placeholder="Enter current city of work"
-            onChange={(e) => setState({ ...state, city: e.target.value })}
+            onChange={(e) => props.setAlumniFormFields("city", e.target.value)}
           />
         </Form.Item>
 
@@ -164,3 +154,10 @@ export default function Registration() {
     </div>
   );
 }
+
+AlumniRegistrationForm.propTypes = {
+  alumniFormFields: object,
+  setAlumniFormFields: func,
+};
+
+export default AlumniRegistrationForm;

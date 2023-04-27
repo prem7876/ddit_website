@@ -1,5 +1,5 @@
 import React from "react";
-import { string } from "prop-types";
+import { string, func, object } from "prop-types";
 import AlumniRegistrationForm from "./AlumniRegistrationForm";
 import StudentRegistrationForm from "./StudentRegistrationForm";
 
@@ -7,7 +7,10 @@ function AlumniStudentForm(props) {
   return (
     <div>
       {props.alumniOrStudent === "Alumni" ? (
-        <AlumniRegistrationForm />
+        <AlumniRegistrationForm
+          setAlumniFormFields={props.setAlumniFormFields}
+          alumniFormFields={props.alumniFormFields}
+        />
       ) : props.alumniOrStudent === "Student" ? (
         <StudentRegistrationForm />
       ) : (
@@ -19,6 +22,8 @@ function AlumniStudentForm(props) {
 
 AlumniStudentForm.propType = {
   alumniOrStudent: string,
+  setAlumniFormFields: func,
+  alumniFormFields: object,
 };
 
 export default AlumniStudentForm;
