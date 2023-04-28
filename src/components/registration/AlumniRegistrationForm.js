@@ -30,7 +30,6 @@ function AlumniRegistrationForm(props) {
   };
 
   useMount(() => {
-    console.log("alumForm useMount:", props.alumniFormFields);
     props.formSubmitted(false);
     regForm.setFieldsValue({
       name: props.alumniFormFields.name,

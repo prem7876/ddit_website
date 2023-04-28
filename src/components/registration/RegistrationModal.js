@@ -4,7 +4,7 @@ import { func } from "prop-types";
 import { useMount, useSetState, useUpdateEffect } from "react-use";
 import FirstUserChoose from "./FirstUserChoose";
 import AlumniStudentForm from "./AlumniStudentForm";
-import useModal from "antd/es/modal/useModal";
+import DisplayForm from "./DisplayForm";
 
 function RegistrationModal(props) {
   const { token } = theme.useToken();
@@ -43,13 +43,11 @@ function RegistrationModal(props) {
 
   const setFormFields = (fieldName, value) => {
     if (state.alumniOrStudent === "Alumni") {
-      console.log("regModal flag al");
       const alumniFormFields = { ...state.alumniFormFields };
       alumniFormFields[fieldName] = value;
       setState({ alumniFormFields });
     }
     if (state.alumniOrStudent === "Student") {
-      console.log("regModal flag std");
       const studentFormFields = { ...state.studentFormFields };
       studentFormFields[fieldName] = value;
       setState({ studentFormFields });
@@ -82,7 +80,18 @@ function RegistrationModal(props) {
     {
       key: 2,
       title: "Last",
-      content: "Last-content",
+      content: (
+        <DisplayForm
+          formFields={
+            state.alumniOrStudent === "Alumni"
+              ? state.alumniFormFields
+              : state.alumniOrStudent === "Student"
+              ? state.studentFormFields
+              : {}
+          }
+          alumniOrStudent={state.alumniOrStudent}
+        />
+      ),
     },
   ];
 
