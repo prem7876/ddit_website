@@ -17,36 +17,41 @@ for (let index = 1989; index <= latestBatch; index++) {
 }
 
 function AlumniRegistrationForm(props) {
-  // const [regForm] = Form.useForm();
+  const [regForm] = Form.useForm();
 
   const handleSubmit = () => {
-    // make post request
+    console.log("success!!!::", props.alumniFormFields.email);
     Axios.post("http://localhost:5000/register", {
       registrationDetails: props.alumniFormFields,
     }).then((e) => {
       console.log("handle submit", e);
     });
-
-    console.log("success!!!::", props.alumniFormFields.email);
-
-    // reset the form
-    // regForm.resetFields();
+    props.formSubmitted(true);
   };
 
   useMount(() => {
-    console.log("from Alumni form: ", props.alumniFormFields);
+    console.log("alumForm useMount:", props.alumniFormFields);
+    props.formSubmitted(false);
+    regForm.setFieldsValue({
+      name: props.alumniFormFields.name,
+      email: props.alumniFormFields.email,
+      batch: props.alumniFormFields.batch,
+      organization: props.alumniFormFields.organization,
+      designation: props.alumniFormFields.designation,
+      city: props.alumniFormFields.city,
+    });
   });
 
   return (
     <div>
       <Form
-        // form={regForm}
-        name="basic"
+        form={regForm}
+        // name="basic"
         labelCol={{ span: 8 }}
         wrapperCol={{ span: 16 }}
         style={{ maxWidth: 600 }}
-        initialValues={{ remember: true }}
-        autoComplete="off"
+        // initialValues={{ remember: true }}
+        // autoComplete="off"
         onFinish={handleSubmit}
       >
         <Form.Item
@@ -55,9 +60,10 @@ function AlumniRegistrationForm(props) {
           rules={[{ required: true, message: "Please input your name!" }]}
         >
           <Input
-            value={props.alumniFormFields.name}
+            // name="name"
+            // value={props.alumniFormFields.name}
             placeholder="Firstname Lastname"
-            onChange={(e) => props.setAlumniFormFields("name", e.target.value)}
+            onChange={(e) => props.setFormFields("name", e.target.value)}
           />
         </Form.Item>
 
@@ -76,9 +82,11 @@ function AlumniRegistrationForm(props) {
           ]}
         >
           <Input
+            name="email"
+            value={props.alumniFormFields.email}
             placeholder="enter email address"
             onChange={(e) => {
-              props.setAlumniFormFields("email", e.target.value);
+              props.setFormFields("email", e.target.value);
             }}
           />
         </Form.Item>
@@ -89,8 +97,10 @@ function AlumniRegistrationForm(props) {
           rules={[{ required: true, message: "Please input your Batch year!" }]}
         >
           <Select
+            name="batch"
+            // value={props.alumniFormFields.batch}
             style={{ width: 120 }}
-            onChange={(e) => props.setAlumniFormFields("batch", e)}
+            onChange={(e) => props.setFormFields("batch", e)}
             options={batchYears}
           />
         </Form.Item>
@@ -106,9 +116,11 @@ function AlumniRegistrationForm(props) {
           ]}
         >
           <Input
+            // name="organization"
+            value={props.alumniFormFields.organization}
             placeholder="Current company name"
             onChange={(e) =>
-              props.setAlumniFormFields("organization", e.target.value)
+              props.setFormFields("organization", e.target.value)
             }
           />
         </Form.Item>
@@ -125,10 +137,10 @@ function AlumniRegistrationForm(props) {
           ]}
         >
           <Input
+            // name="designation"
+            // value={props.alumniFormFields.designation}
             placeholder="YOur designation in the company"
-            onChange={(e) =>
-              props.setAlumniFormFields("designationn", e.target.value)
-            }
+            onChange={(e) => props.setFormFields("designation", e.target.value)}
           />
         </Form.Item>
 
@@ -140,8 +152,10 @@ function AlumniRegistrationForm(props) {
           ]}
         >
           <Input
+            // name="city"
+            // value={props.alumniFormFields.city}
             placeholder="Enter current city of work"
-            onChange={(e) => props.setAlumniFormFields("city", e.target.value)}
+            onChange={(e) => props.setFormFields("city", e.target.value)}
           />
         </Form.Item>
 
@@ -157,7 +171,8 @@ function AlumniRegistrationForm(props) {
 
 AlumniRegistrationForm.propTypes = {
   alumniFormFields: object,
-  setAlumniFormFields: func,
+  setFormFields: func,
+  formSubmitted: func,
 };
 
 export default AlumniRegistrationForm;

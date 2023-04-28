@@ -1,30 +1,17 @@
 import React, { useState } from "react";
 import { Button, message, Steps, theme } from "antd";
 import { func } from "prop-types";
-import { useSetState } from "react-use";
+import { useMount, useSetState, useUpdateEffect } from "react-use";
 import FirstUserChoose from "./FirstUserChoose";
 import AlumniStudentForm from "./AlumniStudentForm";
-
-// const steps = [
-//   {
-//     title: "First",
-//     content: "First-content",
-//   },
-//   {
-//     title: "Second",
-//     content: "Second-content",
-//   },
-//   {
-//     title: "Last",
-//     content: "Last-content",
-//   },
-// ];
+import useModal from "antd/es/modal/useModal";
 
 function RegistrationModal(props) {
   const { token } = theme.useToken();
   const [current, setCurrent] = useState(0);
   const [state, setState] = useSetState({
     alumniOrStudent: undefined,
+    formSubmitted: false,
     alumniFormFields: {
       name: "",
       email: "",
@@ -33,16 +20,44 @@ function RegistrationModal(props) {
       designation: "",
       city: "",
     },
+    studentFormFields: {
+      name: "",
+      email: "",
+      dob: "",
+      studentId: "",
+      batch: null,
+    },
   });
+
+  useMount(() => {
+    if (current === 0) setState({ alumniOrStudent: undefined });
+  });
+
+  useUpdateEffect(() => {
+    if (current === 0) resetFormFields();
+  }, [state.alumniOrStudent]);
 
   const userChose = (option) => {
     setState({ alumniOrStudent: option });
   };
 
-  const setAlumniFormFields = (fieldName, value) => {
-    const alumniFormFields = { ...state.alumniFormFields };
-    alumniFormFields[fieldName] = value;
-    setState({ alumniFormFields });
+  const setFormFields = (fieldName, value) => {
+    if (state.alumniOrStudent === "Alumni") {
+      console.log("regModal flag al");
+      const alumniFormFields = { ...state.alumniFormFields };
+      alumniFormFields[fieldName] = value;
+      setState({ alumniFormFields });
+    }
+    if (state.alumniOrStudent === "Student") {
+      console.log("regModal flag std");
+      const studentFormFields = { ...state.studentFormFields };
+      studentFormFields[fieldName] = value;
+      setState({ studentFormFields });
+    }
+  };
+
+  const formSubmitted = (bool) => {
+    setState({ formSubmitted: bool });
   };
 
   const steps = [
@@ -56,9 +71,11 @@ function RegistrationModal(props) {
       title: "Registration  ",
       content: (
         <AlumniStudentForm
-          setAlumniFormFields={setAlumniFormFields}
+          setFormFields={setFormFields}
           alumniFormFields={state.alumniFormFields}
+          studentFormFields={state.studentFormFields}
           alumniOrStudent={state.alumniOrStudent}
+          formSubmitted={formSubmitted}
         />
       ),
     },
@@ -68,6 +85,25 @@ function RegistrationModal(props) {
       content: "Last-content",
     },
   ];
+
+  const resetFormFields = () => {
+    const alumniFormFields = {
+      name: "",
+      email: "",
+      batch: null,
+      organization: "",
+      designation: "",
+      city: "",
+    };
+    const studentFormFields = {
+      name: "",
+      email: "",
+      dob: "",
+      studentId: "",
+      batch: "",
+    };
+    setState({ alumniFormFields, studentFormFields });
+  };
 
   const handleNext = () => {
     setCurrent(current + 1);
@@ -81,6 +117,7 @@ function RegistrationModal(props) {
     props.openRegister(false);
     message.success("Processing complete!");
     setCurrent(0);
+    resetFormFields();
   };
 
   const items = steps.map((item, key) => ({
@@ -105,7 +142,10 @@ function RegistrationModal(props) {
       <div style={{ marginTop: 24 }}>
         {current < steps.length - 1 && (
           <Button
-            disabled={!state.alumniOrStudent}
+            disabled={
+              (current === 0 && !state.alumniOrStudent) ||
+              (!state.formSubmitted && current === 1)
+            }
             type="primary"
             onClick={handleNext}
           >
