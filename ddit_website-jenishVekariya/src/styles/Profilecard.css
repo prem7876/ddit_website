@@ -1,0 +1,82 @@
+.contact-card{
+    position: relative;
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: rgb(182, 190, 186);
+}
+.contact-card .cards {
+    position: relative;
+    width: 250px;
+    height: 350px;
+    background: linear-gradient(#4c504d, #3c463d, 40%, #1d3548, 30%, #1d3548);
+    margin: 10px;
+    border-radius: 3px;
+    overflow: hidden;
+    display: flex;
+  }
+
+  .detail-container .cards .imgBg {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    transition: 0.5s;
+    z-index: 100000;
+    transform-origin: top;
+    border-radius: 3px;
+    overflow: hidden;
+  }
+
+  
+.detail-container .cards:hover .imgBg {
+    transform: translateY(35px) scale(0.5);
+  }
+  
+  .detail-container .cards .imgBg img {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+  
+  .detail-container .cards .info {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: flex-end; /*thisisfortextbottom */
+    padding: 20px;
+    transform: translateY(100%);
+    transition: 0.5s;
+  }
+  
+  .detail-container .cards:hover .info {
+    transform: translateY(0);
+  }
+  
+  .detail-container .cards .info .naam {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    text-align: center;
+  }
+  .detail-container .cards .info h3 {
+    color: seashell;
+    font-size: 1.2rem;
+    font-weight: 400;
+  }
+  .detail-container .cards .info h3 span {
+    color: #050b0f;
+    font-size: 1rem;
+    font-weight: 300;
+  }

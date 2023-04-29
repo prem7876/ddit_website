@@ -1,0 +1,8 @@
+.footer{
+    background-image: linear-gradient(135deg, #243949 10%, #517fa4 100%);
+    width: 100%;
+    height: 30vh;
+    color: whitesmoke;
+    font-family: 'Poppins', sans-serif;
+}
+
