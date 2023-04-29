@@ -5,7 +5,6 @@ import StudentRegistrationForm from "./StudentRegistrationForm";
 
 function AlumniStudentForm(props) {
   const setFormFields = (fieldName, value) => {
-    //khj
     props.setFormFields(fieldName, value);
   };
   const formSubmitted = (bool) => {

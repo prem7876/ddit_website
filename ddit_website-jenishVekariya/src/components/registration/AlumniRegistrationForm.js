@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { useMount } from "react-use";
 import Axios from "axios";
 import { object, func } from "prop-types";
@@ -18,6 +18,7 @@ for (let index = 1989; index <= latestBatch; index++) {
 
 function AlumniRegistrationForm(props) {
   const [regForm] = Form.useForm();
+  const [disableFields, setDisableFields] = useState(false);
 
   const handleSubmit = () => {
     console.log("success!!!::", props.alumniFormFields.email);
@@ -26,10 +27,12 @@ function AlumniRegistrationForm(props) {
     }).then((e) => {
       console.log("handle submit", e);
     });
+    setDisableFields(true);
     props.formSubmitted(true);
   };
 
   useMount(() => {
+    setDisableFields(false);
     props.formSubmitted(false);
     regForm.setFieldsValue({
       name: props.alumniFormFields.name,
@@ -59,6 +62,7 @@ function AlumniRegistrationForm(props) {
           rules={[{ required: true, message: "Please input your name!" }]}
         >
           <Input
+            disabled={disableFields}
             // name="name"
             // value={props.alumniFormFields.name}
             placeholder="Firstname Lastname"
@@ -81,6 +85,7 @@ function AlumniRegistrationForm(props) {
           ]}
         >
           <Input
+            disabled={disableFields}
             name="email"
             value={props.alumniFormFields.email}
             placeholder="enter email address"
@@ -96,6 +101,7 @@ function AlumniRegistrationForm(props) {
           rules={[{ required: true, message: "Please input your Batch year!" }]}
         >
           <Select
+            disabled={disableFields}
             name="batch"
             // value={props.alumniFormFields.batch}
             style={{ width: 120 }}
@@ -115,6 +121,7 @@ function AlumniRegistrationForm(props) {
           ]}
         >
           <Input
+            disabled={disableFields}
             // name="organization"
             value={props.alumniFormFields.organization}
             placeholder="Current company name"
@@ -136,6 +143,7 @@ function AlumniRegistrationForm(props) {
           ]}
         >
           <Input
+            disabled={disableFields}
             // name="designation"
             // value={props.alumniFormFields.designation}
             placeholder="YOur designation in the company"
@@ -151,6 +159,7 @@ function AlumniRegistrationForm(props) {
           ]}
         >
           <Input
+            disabled={disableFields}
             // name="city"
             // value={props.alumniFormFields.city}
             placeholder="Enter current city of work"
