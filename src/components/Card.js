@@ -3,6 +3,8 @@ import { useSetState } from "react-use";
 import "../styles/Card.css";
 import { Modal, Button } from "antd";
 import photo from "../assets/gears.gif";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faXmark } from "@fortawesome/free-solid-svg-icons";
 import RegistrationModal from "./registration/RegistrationModal";
 
 function Card() {
@@ -26,10 +28,14 @@ function Card() {
           Register
         </Button>
         <Modal
-          title="Hi, Please choose an appropreate option to proceed further"
+          title="Registration"
           open={state.onRegister}
           footer={null}
-          closable
+          onCancel={() => {
+            openRegister(false);
+          }}
+          closeIcon={<FontAwesomeIcon icon={faXmark} />}
+          destroyOnClose
         >
           <RegistrationModal openRegister={openRegister} />
         </Modal>

@@ -1,6 +1,5 @@
 import React from "react";
 import { useMount } from "react-use";
-import Axios from "axios";
 import { object, func } from "prop-types";
 import { Button, DatePicker, Form, Input, Select } from "antd";
 
@@ -20,12 +19,6 @@ function StudentRegistrationForm(props) {
   const [regForm] = Form.useForm();
 
   const handleSubmit = () => {
-    console.log("success!!!::", props.studentFormFields.email);
-    Axios.post("http://localhost:5000/register", {
-      registrationDetails: props.studentFormFields,
-    }).then((e) => {
-      console.log("handle submit", e);
-    });
     props.formSubmitted(true);
   };
 

@@ -1,5 +1,6 @@
 import React, { useState } from "react";
-import { Button, message, Steps, theme } from "antd";
+import Axios from "axios";
+import { Button, message, Popconfirm, Steps, theme } from "antd";
 import { func } from "prop-types";
 import { useMount, useSetState, useUpdateEffect } from "react-use";
 import FirstUserChoose from "./FirstUserChoose";
@@ -30,7 +31,7 @@ function RegistrationModal(props) {
   });
 
   useMount(() => {
-    if (current === 0) setState({ alumniOrStudent: undefined });
+    setCurrent(0);
   });
 
   useUpdateEffect(() => {
@@ -66,7 +67,7 @@ function RegistrationModal(props) {
     },
     {
       key: 1,
-      title: "Registration  ",
+      title: "Registration",
       content: (
         <AlumniStudentForm
           setFormFields={setFormFields}
@@ -79,7 +80,7 @@ function RegistrationModal(props) {
     },
     {
       key: 2,
-      title: "Last",
+      title: "Preview",
       content: (
         <DisplayForm
           formFields={
@@ -118,11 +119,25 @@ function RegistrationModal(props) {
     setCurrent(current + 1);
   };
 
+  const confirmOk = () => {
+    handlePrev();
+  };
+
   const handlePrev = () => {
     setCurrent(current - 1);
   };
 
   const handleDone = () => {
+    Axios.post("http://localhost:5000/register", {
+      registrationDetails:
+        state.alumniOrStudent === "Alumni"
+          ? state.alumniFormFields
+          : state.alumniOrStudent === "Student"
+          ? state.studentFormFields
+          : "Data not added!",
+    }).then((e) => {
+      console.log("handle submit", e);
+    });
     props.openRegister(false);
     message.success("Processing complete!");
     setCurrent(0);
@@ -166,9 +181,20 @@ function RegistrationModal(props) {
             Done
           </Button>
         )}
-        {current > 0 && (
+        {current === 1 && (
+          <Popconfirm
+            title="Go back to choose Alumni/Student?"
+            description="Are you sure? Your progress will be lost."
+            onConfirm={confirmOk}
+            okText="Yes"
+            cancelText="Cancel"
+          >
+            <Button style={{ margin: "0 8px" }}>Go Back</Button>{" "}
+          </Popconfirm>
+        )}
+        {current === 2 && (
           <Button style={{ margin: "0 8px" }} onClick={handlePrev}>
-            Previous
+            Edit Form
           </Button>
         )}
       </div>
