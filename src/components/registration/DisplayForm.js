@@ -1,8 +1,12 @@
 import React from "react";
 import { object, string } from "prop-types";
 import { Form, Card } from "antd";
+import { useMount } from "react-use";
 
 function DisplayForm(props) {
+  useMount(() => {
+    console.log("werdzcvxz", props.formFields.dob.$d.toString().slice(4, 15));
+  });
   return (
     <div>
       <div>
