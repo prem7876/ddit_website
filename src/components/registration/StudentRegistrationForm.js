@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { useMount } from "react-use";
 import Axios from "axios";
 import { object, func } from "prop-types";
@@ -18,6 +18,7 @@ for (let index = 1989; index <= latestBatch; index++) {
 
 function StudentRegistrationForm(props) {
   const [regForm] = Form.useForm();
+  const [disableFields, setDisableFields] = useState(false);
 
   const handleSubmit = () => {
     console.log("success!!!::", props.studentFormFields.email);
@@ -26,10 +27,12 @@ function StudentRegistrationForm(props) {
     }).then((e) => {
       console.log("handle submit", e);
     });
+    setDisableFields(true);
     props.formSubmitted(true);
   };
 
   useMount(() => {
+    setDisableFields(false);
     props.formSubmitted(false);
     regForm.setFieldsValue({
       name: props.studentFormFields.name,
@@ -58,6 +61,7 @@ function StudentRegistrationForm(props) {
           rules={[{ required: true, message: "Please input your name!" }]}
         >
           <Input
+            disabled={disableFields}
             // name="name"
             value={props.studentFormFields.name}
             placeholder="Firstname Lastname"
@@ -80,6 +84,7 @@ function StudentRegistrationForm(props) {
           ]}
         >
           <Input
+            disabled={disableFields}
             // name="email"
             // value={props.studentFormFields.email}
             placeholder="enter email address"
@@ -99,7 +104,10 @@ function StudentRegistrationForm(props) {
             },
           ]}
         >
-          <DatePicker onChange={(value) => props.setFormFields("dob", value)} />
+          <DatePicker
+            disabled={disableFields}
+            onChange={(value) => props.setFormFields("dob", value)}
+          />
         </Form.Item>
 
         <Form.Item
@@ -114,6 +122,7 @@ function StudentRegistrationForm(props) {
           ]}
         >
           <Input
+            disabled={disableFields}
             // name="designation"
             // value={props.studentFormFields.designation}
             placeholder="ie: 00ICXXX000"
@@ -127,6 +136,7 @@ function StudentRegistrationForm(props) {
           rules={[{ required: true, message: "Please input your Batch year!" }]}
         >
           <Select
+            disabled={disableFields}
             // name="batch"
             // value={props.studentFormFields.batch}
             style={{ width: 120 }}
